@@ -9,6 +9,7 @@ class Cartscreen extends StatefulWidget {
 }
 
 class _CartscreenState extends State<Cartscreen> {
+  
 
   List imageList = [
     "assets/images/image1.jpg",
@@ -83,7 +84,7 @@ class _CartscreenState extends State<Cartscreen> {
                                 ),
                                 SizedBox(height: 10,),
                                 Text(
-                                  "Hodded Jacket",
+                                  "Hooded Jacket",
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.black26,
