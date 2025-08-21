@@ -1,23 +1,25 @@
 import 'package:ecommerce/widgets/product_details_popup.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class Productscreen extends StatefulWidget {
+  final Map<String, dynamic> product;
+
+  const Productscreen({Key? key, required this.product}) : super(key: key);
+
   @override
   State<Productscreen> createState() => _ProductscreenState();
 }
 
 class _ProductscreenState extends State<Productscreen> {
-
-  List<String> images = [
-    "assets/images/image1.jpg",
-    "assets/images/image2.jpg",
-    "assets/images/image3.jpg",
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final product = widget.product;
+
+    // 👇 R-[epeat thumbnail 3 times so carousel works even with one image
+    final List<String> images = List.generate(3, (_) => product['thumbnail']);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Product Overview"),
@@ -31,85 +33,96 @@ class _ProductscreenState extends State<Productscreen> {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: FanCarouselImageSlider.sliderType2(
-                    imagesLink: images,
-                    isAssets: true,
-                    autoPlay: true,
-                    sliderHeight: 430, // controls how much of the next image is shown
+                // 🖼 Carousel for product images
+                Container(
+                  color: Colors.transparent, // or use your page’s background color
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: FanCarouselImageSlider.sliderType2(
+                      imagesLink: images,
+                      isAssets: false,
+                      autoPlay: true,
+                      sliderHeight: 430,
+                      imageFitMode: BoxFit.contain,
+                      currentItemShadow: [],       // ⬅ removes center image shadow
+                      sideItemsShadow: [],         // ⬅ removes side image shadows
+                    ),
                   ),
                 ),
+
+                // 📝 Title + Price
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      children: [
-                        SizedBox(height: 30),
-                        Text(
-                          "Warm Zipper",
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 25,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20),
+                          AutoSizeText(
+                            product['title'],
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 25,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "Hooded Jacket",
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontWeight: FontWeight.w500,
+                          SizedBox(height: 5),
+                          Text(
+                            product['brand'] ?? "No Brand",
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     Text(
-                      "\$300.0",
+                      "\$${product['price']}",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Color(0xfffe6969),
+                        color: Color(0xfff50303),
+                        fontSize: 22,
                       ),
                     ),
                   ],
                 ),
+
                 SizedBox(height: 10),
+
+                // ⭐ Rating
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: RatingBar.builder(
-                    initialRating: 3,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 3.0),
-                    itemSize: 25,
-                    itemBuilder: (context, _) =>
-                        Icon(Icons.star, color: Colors.amber),
-                    onRatingUpdate: (rating) {
-                      print(rating);
-                    },
+                  child: Row(
+                    children: [
+                      Icon(Icons.star, color: Colors.amber),
+                      Text("(${product['rating']})"),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+
+                SizedBox(height: 15),
+
+                // 📖 Description
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                    product['description'] ?? "No description available",
                     style: TextStyle(
                       color: Colors.black54,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+
+                SizedBox(height: 30),
+
+                // 🛒 Actions
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [

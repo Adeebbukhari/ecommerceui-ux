@@ -1,8 +1,6 @@
-import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:ecommerce/screens/productscreen.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
 import '../api/api_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -48,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -156,14 +154,14 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 20),
 
               // 🛍 Horizontal Products List
-              Container(
-                height: 272,
+              SizedBox(
+                height: 300,
                 child: ListView.builder(
-                  itemCount: products.length,
+                  itemCount: products.reversed.toList().length,
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final product = products[index];
+                    final product = products.reversed.toList()[index];
                     return Container(
                       margin:
                       EdgeInsets.only(left: 15, right: 15),
@@ -180,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                Productscreen()));
+                                                Productscreen(product: product)));
                                   },
                                   child: ClipRRect(
                                     borderRadius:
@@ -216,14 +214,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          Text(
-                            product['title'],
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                          Container(
+                            width: 150,
+                            child: AutoSizeText(
+                              product['title'],
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 25,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
                           SizedBox(height: 10),
                           Row(
@@ -294,7 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              Productscreen()));
+                                              Productscreen(product: product,)));
                                 },
                                 child: ClipRRect(
                                   borderRadius:
@@ -346,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Text(
                               "\$${product['price']}",
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xfffe6969),
                               ),

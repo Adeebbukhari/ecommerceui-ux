@@ -1,6 +1,3 @@
-import 'package:ecommerce/screens/loginscreen.dart';
-import 'package:ecommerce/screens/navigationscreen.dart';
-import 'package:ecommerce/screens/onboardingscreen.dart';
 import 'package:ecommerce/screens/splashscreen.dart';
 import 'package:flutter/material.dart';
 
