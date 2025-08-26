@@ -31,7 +31,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
               ),
 
-          SizedBox(height: 20,),
+              SizedBox(height: 20,),
 
                 Text(
                 "Please Enter Your number. You will receive an message which consists Otp",
@@ -39,9 +39,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   fontSize: 15,
                 ),
                 ),
-
                 SizedBox(height: 30),
-
                 // TextField for email input
                 TextField(
                   decoration: InputDecoration(
@@ -64,6 +62,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
+
                 child: const Text(
                   "Send Code",
                   style: TextStyle(

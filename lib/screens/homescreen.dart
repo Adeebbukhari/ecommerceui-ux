@@ -11,24 +11,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List tabs = [
-    "All", "Category", "Top", "Recommended"
-  ];
-
-  List<dynamic> products = [];
-  bool isLoading = true; // loading state
-
+  List tabs = ["All", "Category", "Top", "Recommended"];
+  List<dynamic> allProducts = [];     // Original products
+  List<dynamic> filteredProducts = []; // Filtered for search
+  bool isLoading = true;
+  TextEditingController searchController = TextEditingController();
   @override
   void initState() {
     super.initState();
     loadProducts();
   }
-
   void loadProducts() async {
     try {
       final fetchedProducts = await fetchProducts();
       setState(() {
-        products = fetchedProducts;
+        allProducts = fetchedProducts;
+        filteredProducts = fetchedProducts; // initially same
         isLoading = false;
       });
     } catch (e) {
@@ -38,7 +36,27 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
+  // 🔎 Filter function
+  void filterProducts(String query) {
+    List<dynamic> results = [];
+    if (query.isEmpty) {
+      results = allProducts;
+    } else {
+      results = allProducts.where((product) {
+        final title = product['title'].toString().toLowerCase();
+        final rating = product['rating'].toString().toLowerCase();
+        final price = product['price'].toString().toLowerCase();
+        final searchQuery = query.toLowerCase();
 
+        return title.contains(searchQuery) ||
+            rating.contains(searchQuery) ||
+            price.contains(searchQuery);
+      }).toList();
+    }
+    setState(() {
+      filteredProducts = results;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,11 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 30),
+          padding: const EdgeInsets.only(
+              left: 15, right: 15, top: 20, bottom: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // 🔍 Search bar and notification icon
+              // 🔍 Search + Notification
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -70,6 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     child: TextField(
+                      controller: searchController,
+                      onChanged: filterProducts, // 🔑 filter as typing
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           Icons.search,
@@ -103,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: 20),
 
-              // 🖼 Banner image
+              // 🖼 Banner
               Container(
                 height: 150,
                 width: MediaQuery.of(context).size.width,
@@ -150,18 +171,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-
               SizedBox(height: 20),
-
-              // 🛍 Horizontal Products List
-              SizedBox(
+              // 🛍 Horizontal Products
+              filteredProducts.isEmpty
+                  ? Text("No products found",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red))
+                  : SizedBox(
                 height: 300,
                 child: ListView.builder(
-                  itemCount: products.reversed.toList().length,
+                  itemCount:
+                  filteredProducts.reversed.toList().length,
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final product = products.reversed.toList()[index];
+                    final product =
+                    filteredProducts.reversed.toList()[index];
                     return Container(
                       margin:
                       EdgeInsets.only(left: 15, right: 15),
@@ -178,11 +205,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                Productscreen(product: product)));
+                                                Productscreen(
+                                                    product:
+                                                    product)));
                                   },
                                   child: ClipRRect(
                                     borderRadius:
-                                    BorderRadius.circular(10),
+                                    BorderRadius.circular(
+                                        10),
                                     child: Image.network(
                                       product['thumbnail'],
                                       fit: BoxFit.cover,
@@ -200,7 +230,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius:
-                                      BorderRadius.circular(20),
+                                      BorderRadius.circular(
+                                          20),
                                     ),
                                     child: Center(
                                       child: Icon(
@@ -214,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          Container(
+                          SizedBox(
                             width: 150,
                             child: AutoSizeText(
                               product['title'],
@@ -230,7 +261,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(height: 10),
                           Row(
                             children: [
-                              Icon(Icons.star, color: Colors.amber),
+                              Icon(Icons.star,
+                                  color: Colors.amber),
                               Text('(${product['rating']})'),
                               SizedBox(width: 10),
                               Text(
@@ -252,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: 10),
 
-              // 🆕 Newest Products Title
+              // 🆕 Newest Product
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -268,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // 📦 Grid Products
               GridView.builder(
-                itemCount: products.length,
+                itemCount: filteredProducts.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 gridDelegate:
@@ -278,13 +310,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisSpacing: 2,
                 ),
                 itemBuilder: (context, index) {
-                  final product = products[index];
+                  final product = filteredProducts[index];
                   return Container(
-                    margin:
-                    EdgeInsets.only(left: 15, right: 15),
+                    margin: EdgeInsets.only(left: 15, right: 15),
                     child: Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
                           height: 200,
@@ -296,7 +326,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              Productscreen(product: product,)));
+                                              Productscreen(
+                                                  product: product)));
                                 },
                                 child: ClipRRect(
                                   borderRadius:

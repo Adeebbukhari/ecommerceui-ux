@@ -17,7 +17,7 @@ class _ProductscreenState extends State<Productscreen> {
   Widget build(BuildContext context) {
     final product = widget.product;
 
-    // 👇 R-[epeat thumbnail 3 times so carousel works even with one image
+    // 👇 Repeat thumbnail 3 times so carousel works even with one image
     final List<String> images = List.generate(3, (_) => product['thumbnail']);
 
     return Scaffold(
