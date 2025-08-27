@@ -1,7 +1,9 @@
-import 'package:ecommerce/widgets/product_details_popup.dart';
+import 'package:ecommerce/screens/payementmethodscreen.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import '../widgets/container_button_modal.dart';
+import '../storage/cart_storage.dart';
 
 class Productscreen extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -13,17 +15,38 @@ class Productscreen extends StatefulWidget {
 }
 
 class _ProductscreenState extends State<Productscreen> {
+  int itemCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCart();
+  }
+
+  Future<void> _loadCart() async {
+    final count = await CartStorage.getProductCount(widget.product['id'].toString());
+    setState(() {
+      itemCount = count;
+    });
+  }
+
+  Future<void> _updateCart(int count) async {
+    setState(() {
+      itemCount = count;
+    });
+    await CartStorage.saveProductCount(widget.product['id'].toString(), count);
+  }
+
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
 
-    // 👇 Repeat thumbnail 3 times so carousel works even with one image
     final List<String> images = List.generate(3, (_) => product['thumbnail']);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Product Overview"),
-        leading: BackButton(),
+        title: const Text("Product Overview"),
+        leading: const BackButton(),
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -35,9 +58,9 @@ class _ProductscreenState extends State<Productscreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // 🖼 Carousel for product images
+                // 🖼 Carousel
                 Container(
-                  color: Colors.transparent, // or use your page’s background color
+                  color: Colors.transparent,
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: FanCarouselImageSlider.sliderType2(
@@ -46,8 +69,8 @@ class _ProductscreenState extends State<Productscreen> {
                       autoPlay: true,
                       sliderHeight: 430,
                       imageFitMode: BoxFit.contain,
-                      currentItemShadow: [],       // ⬅ removes center image shadow
-                      sideItemsShadow: [],         // ⬅ removes side image shadows
+                      currentItemShadow: [],
+                      sideItemsShadow: [],
                     ),
                   ),
                 ),
@@ -60,10 +83,10 @@ class _ProductscreenState extends State<Productscreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           AutoSizeText(
                             product['title'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black87,
                               fontWeight: FontWeight.w900,
                               fontSize: 25,
@@ -71,10 +94,10 @@ class _ProductscreenState extends State<Productscreen> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Text(
                             product['brand'] ?? "No Brand",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.bold,
                             ),
@@ -84,7 +107,7 @@ class _ProductscreenState extends State<Productscreen> {
                     ),
                     Text(
                       "\$${product['price']}",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(0xfff50303),
                         fontSize: 22,
@@ -93,52 +116,105 @@ class _ProductscreenState extends State<Productscreen> {
                   ],
                 ),
 
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // ⭐ Rating
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Row(
                     children: [
-                      Icon(Icons.star, color: Colors.amber),
+                      const Icon(Icons.star, color: Colors.amber),
                       Text("(${product['rating']})"),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
 
                 // 📖 Description
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     product['description'] ?? "No description available",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black54,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
 
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
 
                 // 🛒 Actions
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    // 🛒 Cart Button
                     Container(
                       height: 60,
-                      width: 60,
+                      width: itemCount == 0 ? 60 : 120,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Icon(
-                        Icons.shopping_cart,
-                        color: Color(0xfffe6969),
+                      child: itemCount == 0
+                          ? InkWell(
+                        onTap: () {
+                          _updateCart(1);
+                        },
+                        child: const Icon(
+                          Icons.shopping_cart,
+                          color: Color(0xfffe6969),
+                        ),
+                      )
+                          : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              if (itemCount > 1) {
+                                _updateCart(itemCount - 1);
+                              } else {
+                                _updateCart(0);
+                              }
+                            },
+                            child: const Icon(Icons.remove,
+                                color: Colors.red),
+                          ),
+                          Text(
+                            itemCount.toString(),
+                            style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _updateCart(itemCount + 1);
+                            },
+                            child: const Icon(Icons.add,
+                                color: Colors.red),
+                          ),
+                        ],
                       ),
                     ),
-                    ProductDetailsPopup(),
+
+                    // 🛒 Buy Now
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PayementMethodScreen()),
+                        );
+                      },
+                      child: ContainerButtonModal(
+                        containerWidth:
+                        MediaQuery.of(context).size.width / 1.6,
+                        itext: "Buy Now",
+                        bgcolor: Colors.red,
+                      ),
+                    ),
                   ],
                 ),
               ],
