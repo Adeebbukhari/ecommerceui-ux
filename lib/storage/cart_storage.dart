@@ -42,3 +42,4 @@ class CartStorage {
     await prefs.remove(_cartKey);
   }
 }
+

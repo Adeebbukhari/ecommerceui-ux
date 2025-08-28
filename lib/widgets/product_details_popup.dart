@@ -1,6 +1,7 @@
-import 'package:ecommerce/screens/cartscreen.dart';
 import 'package:ecommerce/widgets/container_button_modal.dart';
 import 'package:flutter/material.dart';
+
+import '../screens/cartscreen.dart';
 
 class ProductDetailsPopup extends StatefulWidget {
   @override
