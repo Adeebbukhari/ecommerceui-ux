@@ -45,8 +45,8 @@ class _ProductscreenState extends State<Productscreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Product Overview"),
-        leading: const BackButton(),
+        title: Text("Product Overview"),
+        leading: BackButton(),
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -110,7 +110,7 @@ class _ProductscreenState extends State<Productscreen> {
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(0xfff50303),
-                        fontSize: 22,
+                        fontSize: 25,
                       ),
                     ),
                   ],
@@ -178,8 +178,7 @@ class _ProductscreenState extends State<Productscreen> {
                                 _updateCart(0);
                               }
                             },
-                            child: const Icon(Icons.remove,
-                                color: Colors.red),
+                            child: const Icon(Icons.remove, color: Colors.red),
                           ),
                           Text(
                             itemCount.toString(),
@@ -192,25 +191,25 @@ class _ProductscreenState extends State<Productscreen> {
                             onTap: () {
                               _updateCart(itemCount + 1);
                             },
-                            child: const Icon(Icons.add,
-                                color: Colors.red),
+                            child: const Icon(Icons.add, color: Colors.red),
                           ),
                         ],
                       ),
                     ),
-
                     // 🛒 Buy Now
                     InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => PayementMethodScreen()),
+                            builder: (context) => PayementMethodScreen(
+                              productPrice: (product['price'] as num).toDouble(),
+                            ),
+                          ),
                         );
                       },
                       child: ContainerButtonModal(
-                        containerWidth:
-                        MediaQuery.of(context).size.width / 1.6,
+                        containerWidth: MediaQuery.of(context).size.width / 1.6,
                         itext: "Buy Now",
                         bgcolor: Colors.red,
                       ),
