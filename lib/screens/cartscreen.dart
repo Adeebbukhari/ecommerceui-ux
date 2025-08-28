@@ -101,14 +101,32 @@ class _CartscreenState extends State<Cartscreen> {
         });
       } else {
         // fallback entry if product detail not available
-        items.add({
-          'id': productId.toString(),
-          'title': 'Unknown product',
-          'brand': '',
-          'price': 0.0,
-          'thumbnail': '',
-          'quantity': quantity,
-        });
+        // NOTE: we try to preserve any info stored in cartMap if it's a map with product fields
+        if (value is Map && (value.containsKey('price') || value.containsKey('title'))) {
+          final double price = (value['price'] is num)
+              ? (value['price'] as num).toDouble()
+              : double.tryParse(value['price']?.toString() ?? '0') ?? 0.0;
+          final int qty = value['quantity'] is int
+              ? value['quantity']
+              : (value['count'] is int ? value['count'] : quantity);
+          items.add({
+            'id': productId.toString(),
+            'title': value['title'] ?? 'No title',
+            'brand': value['brand'] ?? '',
+            'price': price,
+            'thumbnail': value['thumbnail'] ?? '',
+            'quantity': qty,
+          });
+        } else {
+          items.add({
+            'id': productId.toString(),
+            'title': 'Unknown product',
+            'brand': '',
+            'price': 0.0,
+            'thumbnail': '',
+            'quantity': quantity,
+          });
+        }
       }
     });
 
@@ -129,7 +147,7 @@ class _CartscreenState extends State<Cartscreen> {
 
   /// update quantity: persist via existing CartStorage.saveProductCount
   Future<void> _setQuantity(String productId, int newQty) async {
-    // use existing API: saveProductCount(productId, count) where count=0 removes it
+    // save to storage (count=0 removes it)
     await CartStorage.saveProductCount(productId.toString(), newQty);
 
     // update local UI immediately for snappy feedback
@@ -267,7 +285,7 @@ class _CartscreenState extends State<Cartscreen> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                 SizedBox(height: 10),
+                                SizedBox(height: 10),
                                 Text(
                                   subtitle.isNotEmpty ? subtitle : "Hooded Jacket",
                                   style:  TextStyle(
@@ -275,7 +293,7 @@ class _CartscreenState extends State<Cartscreen> {
                                     color: Colors.black26,
                                   ),
                                 ),
-                                 SizedBox(height: 10),
+                                SizedBox(height: 10),
                                 Text(
                                   "\$${price.toStringAsFixed(2)}",
                                   style: TextStyle(
@@ -288,16 +306,18 @@ class _CartscreenState extends State<Cartscreen> {
                                 GestureDetector(
                                   onTap: () {
                                     final newQty = qty - 1;
+                                    // update storage + UI immediately
                                     _setQuantity(item['id'].toString(), newQty);
                                   },
                                   child: Icon(CupertinoIcons.minus, color: Color(0xfffe6969)),
                                 ),
-                                 SizedBox(width: 20),
+                                SizedBox(width: 20),
                                 Text(qty.toString(), style:  TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-                                 SizedBox(width: 20),
+                                SizedBox(width: 20),
                                 GestureDetector(
                                   onTap: () {
                                     final newQty = qty + 1;
+                                    // update storage + UI immediately
                                     _setQuantity(item['id'].toString(), newQty);
                                   },
                                   child:  Icon(CupertinoIcons.plus, color: Color(0xfffe6969)),
@@ -323,8 +343,33 @@ class _CartscreenState extends State<Cartscreen> {
               ),
               SizedBox(height: 20),
               InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => PayementMethodScreen()));
+                onTap: () async {
+                  // If subtotal is zero, do nothing (prevents sending zero to payment)
+                  if (_totalPrice <= 0) return;
+
+                  // Pass the cart subtotal into the payment screen and wait for its result.
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PayementMethodScreen(
+                        productPrice: _totalPrice, // pass cart total
+                        isFromCart: true, // inform payment screen this is a cart flow
+                      ),
+                    ),
+                  );
+
+                  // If payment succeeded (child screen returned {'paid': true}),
+                  // clear cart by saving 0 for each product (safe API) and reload.
+                  if (result != null && result is Map && result['paid'] == true) {
+                    // remove each item by saving count = 0
+                    for (final it in List<Map<String, dynamic>>.from(_cartItems)) {
+                      await CartStorage.saveProductCount(it['id'].toString(), 0);
+                    }
+                    await _loadCartItems(); // refresh UI immediately
+                  } else {
+                    // Even if no paid result, reload to pick up any changes made in payment flow
+                    await _loadCartItems();
+                  }
                 },
                 child: ContainerButtonModal(itext: "Proceed", containerWidth: MediaQuery.of(context).size.width, bgcolor: Color(0xfffe6969)),
               )

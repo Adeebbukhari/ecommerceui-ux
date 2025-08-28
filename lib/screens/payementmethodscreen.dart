@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import '../api/api_service.dart';
 
 class PayementMethodScreen extends StatefulWidget {
+  // productPrice is used for both: (A) single product buy-now, or (B) cart subtotal when coming from cart
   final double? productPrice;
+  final bool isFromCart;
 
-  const PayementMethodScreen({Key? key, this.productPrice}) : super(key: key); // CHANGED: constructor
+  const PayementMethodScreen({Key? key, this.productPrice, this.isFromCart = false}) : super(key: key);
 
   @override
   State<PayementMethodScreen> createState() => _PayementMethodScreenState();
@@ -15,7 +17,7 @@ class PayementMethodScreen extends StatefulWidget {
 class _PayementMethodScreenState extends State<PayementMethodScreen> {
   int _type1 = 1;
 
-  double? productPrice; // from API or passed-in
+  double? productPrice; // displayed sub-total or single price
   double shippingFee = 10.0; // static for now
 
   void _handleRadio(Object? e) => setState(() {
@@ -25,10 +27,11 @@ class _PayementMethodScreenState extends State<PayementMethodScreen> {
   @override
   void initState() {
     super.initState();
-    // CHANGED: if price is passed from Productscreen, use it; otherwise fallback to API fetch
+    // If a price is passed (either cart subtotal or a single product price), use it.
     if (widget.productPrice != null) {
       productPrice = widget.productPrice;
     } else {
+      // Fallback: try to load a product price from API (keeps backward compatibility).
       _loadProductPrice();
     }
   }
@@ -36,14 +39,21 @@ class _PayementMethodScreenState extends State<PayementMethodScreen> {
   Future<void> _loadProductPrice() async {
     try {
       final products = await fetchProducts();
-      // Example: take the first product’s price
-      final priceFromApi = (products[0]['price'] as num).toDouble();
-
-      setState(() {
-        productPrice = priceFromApi;
-      });
+      if (products != null && products.isNotEmpty) {
+        final priceFromApi = (products[0]['price'] as num).toDouble();
+        setState(() {
+          productPrice = priceFromApi;
+        });
+      } else {
+        setState(() {
+          productPrice = 0.0;
+        });
+      }
     } catch (e) {
       print("Error fetching products: $e");
+      setState(() {
+        productPrice = 0.0;
+      });
     }
   }
 
@@ -263,11 +273,23 @@ class _PayementMethodScreenState extends State<PayementMethodScreen> {
               ),
               SizedBox(height: 70),
               InkWell(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  // Keep existing UX: navigate to shipping address screen.
+                  // When the shipping/payment flow finishes, if it returns {'paid': true},
+                  // bubble that up to the cart by popping this screen with the same result.
+                  final shippingResult = await Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => ShippingAdressScreen()),
                   );
+
+                  if (shippingResult != null && shippingResult is Map && shippingResult['paid'] == true) {
+                    // bubble success back to caller (CartScreen or ProductScreen)
+                    Navigator.pop(context, {'paid': true});
+                  } else {
+                    // If shipping screen didn't return paid==true, we simply stay on this screen
+                    // or allow the user to continue — no destructive action here.
+                    // Optionally you can show a snackbar: (left out to preserve UI exactly)
+                  }
                 },
                 child: ContainerButtonModal(
                   itext: "Confirm Payement",

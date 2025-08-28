@@ -86,7 +86,7 @@ class ConfirmOrderScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> PayementMethodScreen()));
+                        // Navigator.push(context, MaterialPageRoute(builder: (context)=> PayementMethodScreen()));
                       },
                       child: Text(
                         "Change",
