@@ -1,5 +1,4 @@
 import 'package:ecommerce/screens/ordersuccessscreen.dart';
-import 'package:ecommerce/screens/payementmethodscreen.dart';
 import 'package:ecommerce/screens/shippingadressscreen.dart';
 import 'package:flutter/material.dart';
 
