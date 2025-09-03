@@ -101,8 +101,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
                   ),
                 ),
               ),
-
-              const SizedBox(height: 5),
+              SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -129,7 +128,6 @@ class _ForgotScreenState extends State<ForgotScreen> {
                   ),
                 ],
               )
-
             ],
           ),
         ),

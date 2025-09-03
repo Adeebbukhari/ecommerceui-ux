@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../storage/favorite_storage.dart';
 import '../globals.dart';
+import 'productscreen.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -10,7 +11,6 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +22,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.black,
-        leading: BackButton(),
       ),
       body: ValueListenableBuilder<List<String>>(
         valueListenable: favoriteNotifier,
@@ -36,7 +35,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             itemCount: favorites.length,
             itemBuilder: (context, index) {
               final productId = favorites[index];
-              return FutureBuilder<Map<String, dynamic>?>( // get product data
+              return FutureBuilder<Map<String, dynamic>?>(
                 future: FavoriteStorage.getProductById(productId),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return SizedBox();
@@ -80,6 +79,14 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                           });
                         },
                       ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Productscreen(product: product),
+                          ),
+                        );
+                      },
                     ),
                   );
                 },

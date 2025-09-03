@@ -17,7 +17,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.black,
-        leading: BackButton(),
       ),
 
       // Body content
