@@ -63,31 +63,31 @@ class _OtpvverfiyscreenState extends State<Otpvverfiyscreen> with CodeAutoFill {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 21.0),
+          padding:  EdgeInsets.symmetric(horizontal: 21.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 10),
-              const Align(
+               SizedBox(height: 10),
+               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Enter OTP",
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               ),
-              const SizedBox(height: 60),
+               SizedBox(height: 60),
               PinFieldAutoFill(
                 controller: textEditingController,
                 codeLength: 4,
                 decoration: UnderlineDecoration(
-                  textStyle: const TextStyle(fontSize: 20, color: Colors.black),
+                  textStyle:  TextStyle(fontSize: 20, color: Colors.black),
                   colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
                 ),
                 onCodeChanged: (code) {
                   print("Typed OTP: $code");
                 },
               ),
-              const SizedBox(height: 30),
+               SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
                   // Add OTP verification logic here if needed
@@ -97,13 +97,13 @@ class _OtpvverfiyscreenState extends State<Otpvverfiyscreen> with CodeAutoFill {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(55),
-                  backgroundColor: const Color(0xffef6969),
+                  minimumSize:  Size.fromHeight(55),
+                  backgroundColor:  Color(0xffef6969),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
+                child:  Text(
                   "Reset Password",
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),

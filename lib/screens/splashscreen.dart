@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
         // ✅ Fix: Use width as screen width, not height
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
+        decoration:  BoxDecoration(
           color: Colors.black,
           image: DecorationImage(
             image: AssetImage("assets/images/image2.jpg"),
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children:  [
             Icon(
               Icons.shopping_cart,
               size: 250,

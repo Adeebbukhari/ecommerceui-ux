@@ -25,18 +25,17 @@ class _ForgotScreenState extends State<ForgotScreen> {
         elevation: 0,
         foregroundColor: Colors.black,
       ),
-
       // Scrollable Body
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding:  EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 10),
+               SizedBox(height: 10),
 
               // Heading
-              const Text(
+               Text(
                 "Forgot Password",
                 style: TextStyle(
                   fontSize: 30,
@@ -44,7 +43,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
                 ),
               ),
 
-              const SizedBox(height: 50),
+               SizedBox(height: 50),
 
               // Description text
               Text(
@@ -54,7 +53,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
                 ),
               ),
 
-              const SizedBox(height: 30),
+               SizedBox(height: 30),
 
               // TextField for email input
               TextField(
@@ -67,14 +66,14 @@ class _ForgotScreenState extends State<ForgotScreen> {
                 },
                 decoration: InputDecoration(
                   labelText: "Email", // ✅ Correct usage of labelText
-                  border: const OutlineInputBorder(), // ✅ Corrected usage
+                  border:  OutlineInputBorder(), // ✅ Corrected usage
                   suffixIcon: IconButton( // ✅ suffixIcon instead of suffix
                     onPressed: () {
                       setState(() {
                         emailController.clear();
                       });
                     },
-                    icon: const Icon(Icons.cancel),
+                    icon:  Icon(Icons.cancel),
                   ),
                 ),
               ),
@@ -93,7 +92,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
+                child:  Text(
                   "Send Code",
                   style: TextStyle(
                     color: Colors.white,

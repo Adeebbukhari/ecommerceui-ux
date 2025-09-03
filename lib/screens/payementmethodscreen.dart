@@ -72,7 +72,7 @@ class _PayementMethodScreenState extends State<PayementMethodScreen> {
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding:  EdgeInsets.all(20.0),
         child: Center(
           child: Column(
             children: [

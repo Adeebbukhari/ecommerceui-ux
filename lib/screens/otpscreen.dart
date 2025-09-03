@@ -19,7 +19,7 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 21.0),
+          padding:  EdgeInsets.symmetric(horizontal: 21.0),
           child: Column(
             children: [
               SizedBox(height: 10,),
@@ -44,7 +44,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 TextField(
                   decoration: InputDecoration(
                     labelText: "Enter Mobile Number",
-                    border: const OutlineInputBorder(),
+                    border:  OutlineInputBorder(),
                     ),
               ),
               SizedBox(height: 30,),
@@ -63,7 +63,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                 ),
 
-                child: const Text(
+                child:  Text(
                   "Send Code",
                   style: TextStyle(
                     color: Colors.white,

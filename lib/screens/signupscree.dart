@@ -18,7 +18,7 @@ class SignUpScreen extends StatelessWidget {
                     SizedBox(height: 50,),
                     Image.asset("assets/images/freed.png"),
                     SizedBox(height: 30,),
-                    Padding(padding: const EdgeInsets.symmetric(horizontal: 25),
+                    Padding(padding:  EdgeInsets.symmetric(horizontal: 25),
                       child: Column(
                         children: [
                           TextField(
@@ -82,7 +82,7 @@ class SignUpScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text(
+                            child:  Text(
                               "Create an account",
                               style: TextStyle(
                                 color: Colors.white,

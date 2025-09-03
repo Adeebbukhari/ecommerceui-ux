@@ -54,7 +54,7 @@ class _ProductscreenState extends State<Productscreen> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(10),
+            padding:  EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -83,10 +83,10 @@ class _ProductscreenState extends State<Productscreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 20),
+                           SizedBox(height: 20),
                           AutoSizeText(
                             product['title'],
-                            style: const TextStyle(
+                            style:  TextStyle(
                               color: Colors.black87,
                               fontWeight: FontWeight.w900,
                               fontSize: 25,
@@ -94,10 +94,10 @@ class _ProductscreenState extends State<Productscreen> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 5),
+                           SizedBox(height: 5),
                           Text(
                             product['brand'] ?? "No Brand",
-                            style: const TextStyle(
+                            style:  TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.bold,
                             ),
@@ -107,7 +107,7 @@ class _ProductscreenState extends State<Productscreen> {
                     ),
                     Text(
                       "\$${product['price']}",
-                      style: const TextStyle(
+                      style:  TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(0xfff50303),
                         fontSize: 25,
@@ -116,34 +116,34 @@ class _ProductscreenState extends State<Productscreen> {
                   ],
                 ),
 
-                const SizedBox(height: 10),
+                 SizedBox(height: 10),
 
                 // ⭐ Rating
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Row(
                     children: [
-                      const Icon(Icons.star, color: Colors.amber),
+                       Icon(Icons.star, color: Colors.amber),
                       Text("(${product['rating']})"),
                     ],
                   ),
                 ),
 
-                const SizedBox(height: 15),
+                 SizedBox(height: 15),
 
                 // 📖 Description
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     product['description'] ?? "No description available",
-                    style: const TextStyle(
+                    style:  TextStyle(
                       color: Colors.black54,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 30),
+                 SizedBox(height: 30),
 
                 // 🛒 Actions
                 Row(
@@ -162,7 +162,7 @@ class _ProductscreenState extends State<Productscreen> {
                         onTap: () {
                           _updateCart(1);
                         },
-                        child: const Icon(
+                        child:  Icon(
                           Icons.shopping_cart,
                           color: Color(0xfffe6969),
                         ),
@@ -178,11 +178,11 @@ class _ProductscreenState extends State<Productscreen> {
                                 _updateCart(0);
                               }
                             },
-                            child: const Icon(Icons.remove, color: Colors.red),
+                            child:  Icon(Icons.remove, color: Colors.red),
                           ),
                           Text(
                             itemCount.toString(),
-                            style: const TextStyle(
+                            style:  TextStyle(
                                 color: Colors.red,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold),
@@ -191,7 +191,7 @@ class _ProductscreenState extends State<Productscreen> {
                             onTap: () {
                               _updateCart(itemCount + 1);
                             },
-                            child: const Icon(Icons.add, color: Colors.red),
+                            child: Icon(Icons.add, color: Colors.red),
                           ),
                         ],
                       ),

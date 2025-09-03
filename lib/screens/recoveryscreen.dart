@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // Main Widget Class
 class RecoveryScreen extends StatefulWidget {
-  const RecoveryScreen({super.key});
+   RecoveryScreen({super.key});
 
   @override
   State<RecoveryScreen> createState() => _RecoveryScreenState();
@@ -24,14 +24,14 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
       // Scrollable Body
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding:  EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 10),
+               SizedBox(height: 10),
 
               // Heading
-              const Text(
+               Text(
                 "Forgot Password",
                 style: TextStyle(
                   fontSize: 30,
@@ -39,13 +39,13 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                 ),
               ),
 
-              const SizedBox(height: 50),
+               SizedBox(height: 50),
 
               TextField(
                 decoration: InputDecoration(
                   labelText: "Enter Otp",
                   prefixIcon: Icon(Icons.numbers),
-                  border: const OutlineInputBorder(),
+                  border:  OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 30,),
@@ -55,7 +55,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                   labelText: "Password",
                   prefixIcon: Icon(Icons.password),
                   suffixIcon: Icon(Icons.remove_red_eye),
-                  border: const OutlineInputBorder(),
+                  border:  OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 30,),
@@ -65,7 +65,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                   labelText: "Confirm Password",
                   prefixIcon: Icon(Icons.password),
                   suffixIcon: Icon(Icons.remove_red_eye),
-                  border: const OutlineInputBorder(),
+                  border:  OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 30,),
@@ -84,7 +84,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
+                child:  Text(
                   "Reset Password",
                   style: TextStyle(
                     color: Colors.white,
@@ -93,7 +93,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+               SizedBox(height: 20),
 
             ],
           ),

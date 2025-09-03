@@ -19,7 +19,7 @@ class Loginscreen extends StatelessWidget {
               SizedBox(height: 140,),
               Image.asset("assets/images/freed.png"),
               SizedBox(height: 50,),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 25),
+              Padding(padding:  EdgeInsets.symmetric(horizontal: 25),
                 child: Column(
                   children: [
                     TextField(
@@ -71,7 +71,7 @@ class Loginscreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text(
+                      child:  Text(
                         "Log In",
                         style: TextStyle(
                           color: Colors.white,
