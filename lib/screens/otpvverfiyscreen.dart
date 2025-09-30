@@ -17,12 +17,12 @@ class _OtpvverfiyscreenState extends State<Otpvverfiyscreen> with CodeAutoFill {
   String? _receivedOtp;
 
   // Decoration for the OTP boxes
-  BoxDecoration get _pinPutDecoration {
-    return BoxDecoration(
-      border: Border.all(color: Theme.of(context).primaryColor),
-      borderRadius: BorderRadius.circular(10.0),
-    );
-  }
+  // BoxDecoration get _pinPutDecoration {
+  //   return BoxDecoration(
+  //     border: Border.all(color: Theme.of(context).primaryColor),
+  //     borderRadius: BorderRadius.circular(10.0),
+  //   );
+  // }
 
   // Get app signature for SMS formatting
   _getSignatureCode() async {

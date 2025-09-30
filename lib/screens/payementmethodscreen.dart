@@ -39,7 +39,7 @@ class _PayementMethodScreenState extends State<PayementMethodScreen> {
   Future<void> _loadProductPrice() async {
     try {
       final products = await fetchProducts();
-      if (products != null && products.isNotEmpty) {
+      if (products.isNotEmpty) {
         final priceFromApi = (products[0]['price'] as num).toDouble();
         setState(() {
           productPrice = priceFromApi;

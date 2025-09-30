@@ -12,7 +12,7 @@ class SignUpScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Center(
             child: SafeArea(
-                child:Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(height: 50,),

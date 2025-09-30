@@ -7,7 +7,7 @@ import '../storage/cart_storage.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class Cartscreen extends StatefulWidget {
-  Cartscreen({Key? key}) : super(key: key);
+  const  Cartscreen({Key? key});
 
   @override
   State<Cartscreen> createState() => _CartscreenState();
