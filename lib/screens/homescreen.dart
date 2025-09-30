@@ -66,7 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // 🔥 Toggle favorite
   void toggleFavorite(String productId) async {
     await FavoriteStorage.toggleFavorite(productId);
-    // ❌ no need to call setState() here
   }
 
   @override

@@ -31,14 +31,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
         index: pageIndex,
         children: pages,
       ),
-      floatingActionButton: SafeArea(
-        child: FloatingActionButton(
-          onPressed: (){},
-          child: Icon(Icons.qr_code, size: 20,),
-          backgroundColor: Color(0xfffe6969),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
         icons: [
           CupertinoIcons.home,
@@ -48,7 +40,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         ],
         inactiveColor: Colors.black.withOpacity(0.5),
         activeColor: Color(0xfffe6969),
-        gapLocation: GapLocation.center,
+        gapLocation: GapLocation.none,
         activeIndex: pageIndex,
         notchSmoothness: NotchSmoothness.softEdge,
         leftCornerRadius: 10,
