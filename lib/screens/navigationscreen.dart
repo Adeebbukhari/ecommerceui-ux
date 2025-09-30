@@ -21,7 +21,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
     Cartscreen(),
     FavoriteScreen(),
     ProfileScreen(),
-
   ];
 
   @override
