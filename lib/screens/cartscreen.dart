@@ -311,9 +311,9 @@ class _CartscreenState extends State<Cartscreen> {
                                   },
                                   child: Icon(CupertinoIcons.minus, color: Color(0xfffe6969)),
                                 ),
-                                SizedBox(width: 20),
+                                SizedBox(width: 10),
                                 Text(qty.toString(), style:  TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-                                SizedBox(width: 20),
+                                SizedBox(width: 10),
                                 GestureDetector(
                                   onTap: () {
                                     final newQty = qty + 1;
