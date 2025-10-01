@@ -1,4 +1,4 @@
-import 'package:ecommerce/screens/navigationscreen.dart';
+import 'package:ecommerce/screens/signupscree.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Duration(seconds: 4),
           () => Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => NavigationScreen()),
+        MaterialPageRoute(builder: (context) => SignUpScreen()),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:ecommerce/screens/navigationscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce/screens/homescreen.dart';
 import 'package:ecommerce/screens/loginscreen.dart';
@@ -72,7 +73,7 @@ class SignUpScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => HomeScreen()),
+                                MaterialPageRoute(builder: (context) => NavigationScreen()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
