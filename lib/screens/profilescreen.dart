@@ -1,3 +1,4 @@
+import 'package:ecommerce/screens/favoritescreen.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -65,7 +66,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               leading: Icon(Icons.favorite, color: Color(0xfffe6969)),
               title: Text("Wishlist"),
               trailing: Icon(Icons.arrow_forward_ios),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            FavoriteScreen()));
+              },
             ),
             ListTile(
               leading: Icon(Icons.settings, color: Color(0xfffe6969)),
