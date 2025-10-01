@@ -1,3 +1,4 @@
+import 'package:ecommerce/screens/loginscreen.dart';
 import 'package:ecommerce/screens/signupscree.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -18,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Duration(seconds: 4),
           () => Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => SignUpScreen()),
+        MaterialPageRoute(builder: (context) => Loginscreen()),
       ),
     );
   }
@@ -27,7 +28,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        // ✅ Fix: Use width as screen width, not height
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration:  BoxDecoration(
