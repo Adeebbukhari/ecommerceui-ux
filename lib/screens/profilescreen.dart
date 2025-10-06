@@ -1,5 +1,9 @@
+import 'package:ecommerce/screens/addressscreen.dart';
 import 'package:ecommerce/screens/favoritescreen.dart';
+import 'package:ecommerce/screens/orderhistoryscreen.dart';
 import 'package:flutter/material.dart';
+
+import 'loginscreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -60,7 +64,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               leading: Icon(Icons.shopping_bag, color: Color(0xfffe6969)),
               title: Text("My Orders"),
               trailing: Icon(Icons.arrow_forward_ios),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            OrderHistoryScreen()));
+              },
             ),
             ListTile(
               leading: Icon(Icons.favorite, color: Color(0xfffe6969)),
@@ -76,15 +86,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             ListTile(
               leading: Icon(Icons.settings, color: Color(0xfffe6969)),
-              title: Text("Settings"),
+              title: Text("Saved Address"),
               trailing: Icon(Icons.arrow_forward_ios),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            AddressScreen()));
+              },
             ),
             ListTile(
               leading: Icon(Icons.logout, color: Colors.red),
               title: Text("Logout"),
               trailing: Icon(Icons.arrow_forward_ios),
-              onTap: () {},
+              onTap: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            Loginscreen()));
+              },
             ),
           ],
         ),
