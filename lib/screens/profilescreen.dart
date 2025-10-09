@@ -1,6 +1,7 @@
 import 'package:ecommerce/screens/addressscreen.dart';
 import 'package:ecommerce/screens/favoritescreen.dart';
 import 'package:ecommerce/screens/orderhistoryscreen.dart';
+import 'package:ecommerce/storage/user_storage.dart'; // ✅ Import storage
 import 'package:flutter/material.dart';
 
 import 'loginscreen.dart';
@@ -13,99 +14,112 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String userName = '';   // ✅ To store fetched name
+  String userEmail = '';  // ✅ To store fetched email
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserData(); // ✅ Fetch data when screen opens
+  }
+
+  // ✅ Function to fetch user data from SharedPreferences
+  Future<void> loadUserData() async {
+    final userData = await UserStorage.getUserData();
+
+    setState(() {
+      userName = userData['name'] ?? 'Your Name';
+      userEmail = userData['email'] ?? 'youremail@example.com';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // App bar
       appBar: AppBar(
-        title: Text("Profile"),
+        title: const Text("Profile"),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Colors.black,
+        // foregroundColor: Colors.black,
       ),
 
       // Body content
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-
             // Profile Image
-            CircleAvatar(
+            const CircleAvatar(
               radius: 50,
-              child: 
-                Icon(Icons.person),
+              child: Icon(Icons.person, size: 50),
             ),
 
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
 
-            // Name
+            // ✅ Display User Name
             Text(
-              "Your Name",
-              style: TextStyle(
+              userName,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            // Email
+            // ✅ Display User Email
             Text(
-              "youremail@example.com",
-              style: TextStyle(
+              userEmail,
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
               ),
             ),
 
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
 
             // Option List
             ListTile(
-              leading: Icon(Icons.shopping_bag, color: Color(0xfffe6969)),
-              title: Text("My Orders"),
-              trailing: Icon(Icons.arrow_forward_ios),
+              leading: const Icon(Icons.shopping_bag, color: Color(0xfffe6969)),
+              title: const Text("My Orders"),
+              trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            OrderHistoryScreen()));
+                        builder: (context) => const OrderHistoryScreen()));
               },
             ),
             ListTile(
-              leading: Icon(Icons.favorite, color: Color(0xfffe6969)),
-              title: Text("Wishlist"),
-              trailing: Icon(Icons.arrow_forward_ios),
+              leading: const Icon(Icons.favorite, color: Color(0xfffe6969)),
+              title: const Text("Wishlist"),
+              trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            FavoriteScreen()));
+                        builder: (context) => const FavoriteScreen()));
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings, color: Color(0xfffe6969)),
-              title: Text("Saved Address"),
-              trailing: Icon(Icons.arrow_forward_ios),
+              leading: const Icon(Icons.settings, color: Color(0xfffe6969)),
+              title: const Text("Saved Address"),
+              trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            AddressScreen()));
+                        builder: (context) => const AddressScreen()));
               },
             ),
             ListTile(
-              leading: Icon(Icons.logout, color: Colors.red),
-              title: Text("Logout"),
-              trailing: Icon(Icons.arrow_forward_ios),
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text("Logout"),
+              trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            Loginscreen()));
+                        builder: (context) => const Loginscreen()));
               },
             ),
           ],

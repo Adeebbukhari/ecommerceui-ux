@@ -1,6 +1,7 @@
 import 'package:ecommerce/screens/navigationscreen.dart'; // Navigation after signup
 import 'package:flutter/material.dart'; // Flutter widgets
 import 'package:ecommerce/screens/loginscreen.dart'; // Navigate to login screen
+import 'package:ecommerce/storage/user_storage.dart'; // ✅ Import for local data storage
 
 class SignUpScreen extends StatefulWidget { // Signup page
   const SignUpScreen({super.key});
@@ -105,8 +106,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                     // Create account button
                     ElevatedButton(
-                      onPressed: () { if (_formKey.currentState!.validate()) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>NavigationScreen())); },
-                      style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(55), backgroundColor: const Color(0xffef6969), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          // ✅ Save data locally
+                          await UserStorage.saveUserData(
+                            name: _nameController.text.trim(),
+                            email: _emailController.text.trim(),
+                            mobile: _mobileController.text.trim(),
+                            password: _passwordController.text.trim(),
+                          );
+
+                          // Navigate to next screen
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => NavigationScreen()),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(55),
+                        backgroundColor: const Color(0xffef6969),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
                       child: const Text("Create an account", style: TextStyle(color: Colors.white, fontSize: 18)),
                     ),
                     const SizedBox(height: 10),
