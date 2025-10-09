@@ -85,7 +85,7 @@ class _ProductscreenState extends State<Productscreen> {
                       imagesLink: images,
                       isAssets: false,
                       autoPlay: true,
-                      sliderHeight: 430,
+                      sliderHeight: 400,
                       imageFitMode: BoxFit.contain,
                       currentItemShadow: [], // No shadow
                       sideItemsShadow: [], // No shadow
