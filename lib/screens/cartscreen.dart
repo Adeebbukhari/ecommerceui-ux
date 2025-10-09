@@ -197,9 +197,9 @@ class _CartscreenState extends State<Cartscreen> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title:  Text("Cart"),
         backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
         elevation: 0,
       ),
       body: SingleChildScrollView(

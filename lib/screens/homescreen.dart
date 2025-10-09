@@ -1,10 +1,12 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:ecommerce/screens/productscreen.dart';
-import 'package:flutter/material.dart';
-import '../api/api_service.dart';
-import '../globals.dart';
-import '../storage/favorite_storage.dart';
+// Importing necessary packages
+import 'package:auto_size_text/auto_size_text.dart'; // For auto-adjusting text size
+import 'package:ecommerce/screens/productscreen.dart'; // Product detail screen
+import 'package:flutter/material.dart'; // Flutter UI framework
+import '../api/api_service.dart'; // API service file
+import '../globals.dart'; // Global variables (e.g., favoriteNotifier)
+import '../storage/favorite_storage.dart'; // Local favorite storage management
 
+// Home Screen Stateful Widget
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -12,41 +14,54 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+// State class for HomeScreen
 class _HomeScreenState extends State<HomeScreen> {
+  // List of tab labels
   List tabs = ["All", "Category", "Top", "Recommended"];
-  List<dynamic> allProducts = [];     // Original products
-  List<dynamic> filteredProducts = []; // Filtered for search
+
+  // All products fetched from API
+  List<dynamic> allProducts = [];
+
+  // Products after applying search filter
+  List<dynamic> filteredProducts = [];
+
+  // Loading state
   bool isLoading = true;
+
+  // Text controller for search field
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    loadProducts();
+    loadProducts(); // Load data when screen starts
   }
 
+  // Function to fetch all products
   void loadProducts() async {
     try {
-      final fetchedProducts = await fetchProducts();
+      final fetchedProducts = await fetchProducts(); // Fetch from API
       setState(() {
         allProducts = fetchedProducts;
-        filteredProducts = fetchedProducts; // initially same
+        filteredProducts = fetchedProducts; // Initially same
         isLoading = false;
       });
     } catch (e) {
       print("Error: $e");
       setState(() {
-        isLoading = false;
+        isLoading = false; // Stop loading on error
       });
     }
   }
 
-  // 🔎 Filter function
+  // Function to filter products while typing
   void filterProducts(String query) {
     List<dynamic> results = [];
     if (query.isEmpty) {
+      // If no search input, show all
       results = allProducts;
     } else {
+      // Filter based on title, rating, or price
       results = allProducts.where((product) {
         final title = product['title'].toString().toLowerCase();
         final rating = product['rating'].toString().toLowerCase();
@@ -58,12 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
             price.contains(searchQuery);
       }).toList();
     }
+    // Update filtered products
     setState(() {
       filteredProducts = results;
     });
   }
 
-  // 🔥 Toggle favorite
+  // Function to toggle favorite status
   void toggleFavorite(String productId) async {
     await FavoriteStorage.toggleFavorite(productId);
   }
@@ -71,22 +87,37 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Top app bar
+      appBar: AppBar(
+        automaticallyImplyLeading: false, // Removes the back button
+        backgroundColor: Colors.white, // White background
+        elevation: 0, // No shadow
+        title: const Text(
+          'Home',
+          style: TextStyle(
+            color: Colors.black, // Black text
+            fontWeight: FontWeight.w600, // Semi-bold
+          ),
+        ),
+      ),
+
+      // Body starts
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator()) // Show loader
           : ValueListenableBuilder<List<String>>(
-        valueListenable: favoriteNotifier,
+        valueListenable: favoriteNotifier, // Listen for favorites changes
         builder: (context, favorites, _) {
           return SingleChildScrollView(
             child: Padding(
-              padding:  EdgeInsets.only(
-                  left: 15, right: 15, top: 20, bottom: 30),
+              padding: EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // 🔍 Search + Notification
+                  // 🔍 Search bar + Notification icon row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Search box
                       Container(
                         padding: EdgeInsets.all(5),
                         height: 50,
@@ -104,17 +135,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: TextField(
                           controller: searchController,
-                          onChanged: filterProducts, // 🔑 filter as typing
+                          onChanged: filterProducts, // Filter as typing
                           decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.search,
-                              color: Color(0xfffe6969),
+                              color: Color(0xfffe6969), // Red search icon
                             ),
                             border: InputBorder.none,
                             label: Text("Find your product"),
                           ),
                         ),
                       ),
+
+                      // Notification icon
                       Container(
                         padding: EdgeInsets.all(5),
                         height: 50,
@@ -130,20 +163,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             )
                           ],
                         ),
-                        child: Icon(Icons.notifications,
-                            color: Color(0xfffe6969)),
+                        child: Icon(
+                          Icons.notifications,
+                          color: Color(0xfffe6969),
+                        ),
                       ),
                     ],
                   ),
 
                   SizedBox(height: 20),
 
-                  // 🖼 Banner
+                  // 🖼 Promotional banner
                   Container(
                     height: 150,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      color: Color(0xfffff0dd),
+                      color: Color(0xfffff0dd), // Light orange bg
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Image.asset("assets/images/freed.png"),
@@ -151,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   SizedBox(height: 20),
 
-                  // 📌 Tabs
+                  // 📌 Tabs section
                   SizedBox(
                     height: 50,
                     child: ListView.builder(
@@ -184,55 +219,54 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   ),
+
                   SizedBox(height: 20),
 
-                  // 🛍 Horizontal Products
+                  // 🛍 Horizontal list of products
                   filteredProducts.isEmpty
-                      ? Text("No products found",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red))
+                      ? Text(
+                    "No products found",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    ),
+                  )
                       : SizedBox(
                     height: 300,
                     child: ListView.builder(
-                      itemCount:
-                      filteredProducts.reversed.toList().length,
+                      itemCount: filteredProducts.reversed.toList().length,
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        final product = filteredProducts
-                            .reversed
-                            .toList()[index];
-                        final productId =
-                        product['id'].toString();
-                        final isFav =
-                        favorites.contains(productId);
+                        final product =
+                        filteredProducts.reversed.toList()[index];
+                        final productId = product['id'].toString();
+                        final isFav = favorites.contains(productId);
 
                         return Container(
-                          margin:
-                          EdgeInsets.only(left: 15, right: 15),
+                          margin: EdgeInsets.only(left: 15, right: 15),
                           child: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              // Product image with favorite button
                               SizedBox(
                                 child: Stack(
                                   children: [
+                                    // Product image tap → Product screen
                                     InkWell(
                                       onTap: () {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Productscreen(
-                                                        product:
-                                                        product)));
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                Productscreen(product: product),
+                                          ),
+                                        );
                                       },
                                       child: ClipRRect(
                                         borderRadius:
-                                        BorderRadius.circular(
-                                            10),
+                                        BorderRadius.circular(10),
                                         child: Image.network(
                                           product['thumbnail'],
                                           fit: BoxFit.cover,
@@ -241,6 +275,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                     ),
+
+                                    // Favorite button
                                     Positioned(
                                       right: 10,
                                       top: 10,
@@ -254,26 +290,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius:
-                                            BorderRadius
-                                                .circular(20),
+                                            BorderRadius.circular(20),
                                           ),
                                           child: Center(
                                             child: Icon(
                                               isFav
                                                   ? Icons.favorite
-                                                  : Icons
-                                                  .favorite_border,
-                                              color:
-                                              Color(0xfffe6969),
+                                                  : Icons.favorite_border,
+                                              color: Color(0xfffe6969),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
+
                               SizedBox(height: 10),
+
+                              // Product title
                               SizedBox(
                                 width: 150,
                                 child: AutoSizeText(
@@ -281,17 +317,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: TextStyle(
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w900,
-                                    fontSize: 25,
+                                    fontSize: 20,
                                   ),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
+
                               SizedBox(height: 10),
+
+                              // Rating and price
                               Row(
                                 children: [
-                                  Icon(Icons.star,
-                                      color: Colors.amber),
+                                  Icon(Icons.star, color: Colors.amber),
                                   Text('(${product['rating']})'),
                                   SizedBox(width: 10),
                                   Text(
@@ -311,15 +349,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
 
-                  // 🆕 Newest Product
+                  // 🆕 Newest Product title
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Newest Product",
                       style: TextStyle(
-                        fontSize: 30,
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -327,14 +365,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   SizedBox(height: 10),
 
-                  // 📦 Grid Products
+                  // 📦 Grid view of products
                   GridView.builder(
                     itemCount: filteredProducts.length,
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                    SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                    physics: NeverScrollableScrollPhysics(), // Disable inner scroll
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Two items per row
                       childAspectRatio: 0.6,
                       crossAxisSpacing: 2,
                     ),
@@ -348,6 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Product image
                             SizedBox(
                               height: 200,
                               child: Stack(
@@ -355,21 +393,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                   InkWell(
                                     onTap: () {
                                       Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Productscreen(
-                                                      product: product)));
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              Productscreen(product: product),
+                                        ),
+                                      );
                                     },
                                     child: ClipRRect(
-                                      borderRadius:
-                                      BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(10),
                                       child: Image.network(
                                         product['thumbnail'],
                                         fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
+
+                                  // Favorite icon
                                   Positioned(
                                     right: 10,
                                     top: 10,
@@ -395,11 +435,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
+
                             SizedBox(height: 10),
+
+                            // Product name
                             Text(
                               product['title'],
                               style: TextStyle(
@@ -409,7 +452,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
+
                             SizedBox(height: 10),
+
+                            // Rating + price
                             Row(
                               children: [
                                 Icon(Icons.star, color: Colors.amber),

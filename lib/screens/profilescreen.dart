@@ -38,10 +38,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       // App bar
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("Profile"),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        // foregroundColor: Colors.black,
       ),
 
       // Body content
