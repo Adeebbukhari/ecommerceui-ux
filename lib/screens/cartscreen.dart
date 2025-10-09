@@ -194,7 +194,6 @@ class _CartscreenState extends State<Cartscreen> {
         _wasRouteCurrent = false;
       }
     });
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -344,8 +343,18 @@ class _CartscreenState extends State<Cartscreen> {
               SizedBox(height: 20),
               InkWell(
                 onTap: () async {
-                  // If subtotal is zero, do nothing (prevents sending zero to payment)
-                  if (_totalPrice <= 0) return;
+                  // If subtotal is zero give small pop up
+                  if (_totalPrice <= 0) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Your cart is empty!"),
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.redAccent,
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                    return; // stop further execution
+                  }
 
                   // Pass the cart subtotal into the payment screen and wait for its result.
                   final result = await Navigator.push(
