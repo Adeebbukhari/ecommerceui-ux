@@ -355,7 +355,6 @@ class _CartscreenState extends State<Cartscreen> {
                     );
                     return; // stop further execution
                   }
-
                   // Pass the cart subtotal into the payment screen and wait for its result.
                   final result = await Navigator.push(
                     context,
